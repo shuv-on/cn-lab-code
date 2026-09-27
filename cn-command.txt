@@ -1,0 +1,80 @@
+//lab-07 switch
+enable
+configure terminal
+vlan 10
+ name SALES
+exit
+vlan 20
+ name HR
+exit
+interface fa0/1
+ switchport mode access
+ switchport access vlan 10
+exit
+interface fa0/2
+ switchport mode access
+ switchport access vlan 20
+exit
+interface gi0/1
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20
+end
+copy running-config startup-config
+
+//lab-08 switch
+enable
+configure terminal
+hostname Switch0
+
+vlan 10
+ name SALES
+exit
+
+vlan 20
+ name HR
+exit
+
+! VLAN 10-এর জন্য পোর্ট ১ ও ২ অ্যাসাইন করা
+interface range fa0/1-2
+ switchport mode access
+ switchport access vlan 10
+exit
+
+! VLAN 20-এর জন্য পোর্ট ৩ ও ৪ অ্যাসাইন করা
+interface range fa0/3-4
+ switchport mode access
+ switchport access vlan 20
+exit
+
+! রাউটারের সাথে যুক্ত পোর্টটিকে ট্রাঙ্ক করা
+interface gi0/1
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20
+end
+
+copy running-config startup-config
+
+
+//lab-08 router
+enable
+configure terminal
+hostname Router0
+
+! মেইন ইন্টারফেস চালু করা
+interface gigabitEthernet 0/0
+ no shutdown
+exit
+
+! VLAN 10-এর জন্য ভার্চুয়াল সাব-ইন্টারফেস কনফিগার করা
+interface gigabitEthernet 0/0.10
+ encapsulation dot1Q 10
+ ip address 192.168.10.1 255.255.255.0
+exit
+
+! VLAN 20-এর জন্য ভার্চুয়াল সাব-ইন্টারফেস কনফিগার করা
+interface gigabitEthernet 0/0.20
+ encapsulation dot1Q 20
+ ip address 192.168.20.1 255.255.255.0
+end
+
+copy running-config startup-config
